@@ -9,7 +9,7 @@ import com.example.lab_1.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
 
-    // Used to load the 'lab_1' library on application startup.
+    // Used to load the 'lab_1' library on application startup
     static {
         System.loadLibrary("lab_1");
     }
