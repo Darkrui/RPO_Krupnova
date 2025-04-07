@@ -126,9 +126,11 @@ public class MainActivity extends AppCompatActivity implements TransactionEvents
                 // todo: log error
             }
         }).start();*/
+
+
         testHttpClient();
         //byte[] trd = stringToHex("9F0206000000000100");
-       // transaction(trd);
+        //transaction(trd);
     }
 
     ActivityResultLauncher activityResultLauncher;
