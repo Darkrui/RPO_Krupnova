@@ -1,6 +1,7 @@
 
 package ru.iu3.backend.controllers;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import ru.iu3.backend.models.Artist;
 import ru.iu3.backend.models.Country;
 import ru.iu3.backend.repositories.CountryRepository;
 
@@ -79,4 +81,12 @@ public class CountryController {
             resp.put("deleted", Boolean.FALSE);
         return ResponseEntity.ok(resp);
     }
+    @GetMapping("/countries/{id}/artists")
+    public ResponseEntity<List<Artist>> getCountryArtists(@PathVariable(value = "id") Long countryId) {
+        Optional<Country> cc = countryRepository.findById(countryId);
+        if (cc.isPresent()) {
+            return ResponseEntity.ok(cc.get().artists);
+        }
+        return ResponseEntity.ok(new ArrayList<Artist>());
+}
 }
