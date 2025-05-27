@@ -6,6 +6,9 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -16,12 +19,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import ru.iu3.backend.models.Painting;
 import ru.iu3.backend.repositories.PaintingRepository;
-
+import ru.iu3.backend.tools.DataValidationException;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -31,8 +35,17 @@ public class PaintingController {
     PaintingRepository paintingRepository;
 
     @GetMapping("/paintings")
-    public List getAllPaintings() {
-        return paintingRepository.findAll();
+    public Page getAllPaintings(@RequestParam("page") int page, @RequestParam("limit") int limit) {
+        return paintingRepository.findAll(PageRequest.of(page, limit, Sort.by(Sort.Direction.ASC, "name")));
+    }
+
+    @GetMapping("/paintings/{id}")
+    public ResponseEntity getArtist(@PathVariable(value = "id") Long paintingId)
+            throws DataValidationException
+    {
+        Painting painting = paintingRepository.findById(paintingId)
+                .orElseThrow(()-> new DataValidationException("Художник с таким индексом не найден"));
+        return ResponseEntity.ok(painting);
     }
 
     @PostMapping("/paintings")
@@ -70,8 +83,14 @@ public class PaintingController {
         }
     }
 
+    @PostMapping("/deletepaintings")
+    public ResponseEntity deletePaintings(@RequestBody List<Painting> paintings) {
+        paintingRepository.deleteAll(paintings);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
     @DeleteMapping("/paintings/{id}")
-    public ResponseEntity<Object> deleteMuseum(@PathVariable(value = "id") Long paintingId) {
+    public ResponseEntity<Object> deletePainting(@PathVariable(value = "id") Long paintingId) {
         Optional<Painting>
         painting = paintingRepository.findById(paintingId);
         Map<String, Boolean>

@@ -7,10 +7,23 @@ import Home from "./components/Home";
 import Login from "./components/Login";
 import Utils from "./utils/Utils";
 import { connect } from "react-redux";
-
 import SideBar from "./components/SideBar";
 import CountryListComponent from "./components/CountryListComponent";
 import CountryComponent from "./components/CountryComponent";
+
+import PaintingListComponent from "./components/PaintingListComponent";
+import PaintingComponent from "./components/PaintingComponent";
+
+import ArtistListComponent from "./components/ArtistListComponent";
+import ArtistComponent from "./components/ArtistComponent";
+
+import MuseumComponent from "./components/MuseumComponent";
+import MuseumListComponent from "./components/MuseumListComponent";
+
+import UserComponent from "./components/UserComponent";
+import UserListComponent from "./components/UserListComponent";
+
+import MyAccountComponent from "./components/MyAccountComponent";
 
 const ProtectedRoute = ({ children }) => {
   let user = Utils.getUser();
@@ -54,6 +67,79 @@ const App = (props) => {
                 element={
                   <ProtectedRoute>
                     <Home />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="paintings"
+                element={
+                  <ProtectedRoute>
+                    <PaintingListComponent />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="paintings/:id"
+                element={
+                  <ProtectedRoute>
+                    <PaintingComponent />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="artists"
+                element={
+                  <ProtectedRoute>
+                    <ArtistListComponent />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="artists/:id"
+                element={
+                  <ProtectedRoute>
+                    <ArtistComponent />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="museums"
+                element={
+                  <ProtectedRoute>
+                    <MuseumListComponent />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="museums/:id"
+                element={
+                  <ProtectedRoute>
+                    <MuseumComponent />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="users"
+                element={
+                  <ProtectedRoute>
+                    <UserListComponent />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="users/:id"
+                element={
+                  <ProtectedRoute>
+                    <UserComponent />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="my_account"
+                element={
+                  <ProtectedRoute>
+                    <MyAccountComponent />
                   </ProtectedRoute>
                 }
               />

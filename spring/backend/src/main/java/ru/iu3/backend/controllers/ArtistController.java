@@ -6,6 +6,9 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -30,8 +34,14 @@ public class ArtistController {
     ArtistRepository artistRepository;
 
     @GetMapping("/artists")
-    public List getAllArtists() {
-        return artistRepository.findAll();
+    public Page getAllArtists(@RequestParam("page") int page, @RequestParam("limit") int limit) {
+        return artistRepository.findAll(PageRequest.of(page, limit, Sort.by(Sort.Direction.ASC, "name")));
+    }
+
+    @PostMapping("/deleteartists")
+    public ResponseEntity deleteArtists(@RequestBody List<Artist> paintings) {
+        artistRepository.deleteAll(paintings);
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     @PostMapping("/artists")
@@ -85,5 +95,4 @@ public class ArtistController {
             resp.put("deleted", Boolean.FALSE);
         return ResponseEntity.ok(resp);
     }
-    
 }
