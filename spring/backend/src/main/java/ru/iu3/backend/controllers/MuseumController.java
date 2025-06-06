@@ -25,6 +25,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import ru.iu3.backend.models.Museum;
 import ru.iu3.backend.repositories.MuseumRepository;
+import ru.iu3.backend.tools.DataValidationException;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -78,6 +79,13 @@ public class MuseumController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "country not found");
         }
     }
+    @GetMapping("/museums/{id}")
+public ResponseEntity getMuseum(@PathVariable(value = "id") Long museumId)
+    throws DataValidationException {
+    Museum museum = museumRepository.findById(museumId)
+    .orElseThrow(()->new DataValidationException("музей с таким индексом не найден!"));
+    return ResponseEntity.ok(museum);
+}
 
     @DeleteMapping("/museums/{id}")
     public ResponseEntity<Object> deleteMuseum(@PathVariable(value = "id") Long museumId) {

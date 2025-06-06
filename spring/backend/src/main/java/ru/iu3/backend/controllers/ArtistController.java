@@ -25,6 +25,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import ru.iu3.backend.models.Artist;
 import ru.iu3.backend.repositories.ArtistRepository;
+import ru.iu3.backend.tools.DataValidationException;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -80,6 +81,13 @@ public class ArtistController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "artist not found");
         }
     }
+            @GetMapping("/artists/{id}")
+public ResponseEntity getArtist(@PathVariable(value = "id") Long artistId)
+    throws DataValidationException {
+    Artist artist = artistRepository.findById(artistId)
+    .orElseThrow(()->new DataValidationException("музей с таким индексом не найден!"));
+    return ResponseEntity.ok(artist);
+}
 
     @DeleteMapping("/artists/{id}")
     public ResponseEntity<Object> deleteArtist(@PathVariable(value = "id") Long artistId) {
